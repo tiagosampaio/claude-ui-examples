@@ -36,6 +36,7 @@ npm test
 | `glass-sidebar` | Frosted panel, dock-style icons, a springy glass highlight, night mode | `content.js` | `demo.js` |
 | `lamp-login` | A pull cord with real physics, a flickering lamp, and a login card that appears in the light | `content.js` | `demo.js` |
 | `glassy-otp` | A cut-corner glass card where a typed code rearranges into a wired grid, then bursts into a green check | `content.js` | `demo.js`, `timeline.js` |
+| `clothes-rail` | Clothes that swing round on a rail, then open with colour tags and a front and back view | `content.js` | `demo.js` |
 
 ## Adding an example
 

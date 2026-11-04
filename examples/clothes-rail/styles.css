@@ -1,0 +1,432 @@
+/*
+ * ClosetScene sets every garment's position and rotation each frame. CSS handles
+ * the colours and fades between the rail and the detail view (.is-detail).
+ */
+
+:root {
+  --ink: #17181c;
+  --ink-soft: #7d8089;
+  --line: #bfc1c6;
+}
+
+.scene {
+  position: absolute;
+  top: 260px;
+  left: 0;
+  width: 1080px;
+  height: 1400px;
+  overflow: hidden;
+  background: radial-gradient(circle 900px at 50% 42%, #fbfbfa, #e4e4e1 80%, #d6d6d3);
+  color: var(--ink);
+}
+
+.scene.no-anim,
+.scene.no-anim * {
+  transition: none !important;
+  animation: none !important;
+}
+
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.brand {
+  position: absolute;
+  top: 96px;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  font: 400 54px/1 'Archivo Black', 'Arial Black', sans-serif;
+  letter-spacing: 0.04em;
+  text-align: center;
+  transition: opacity 320ms ease;
+}
+
+.rail {
+  position: absolute;
+  top: 234px;
+  left: 40px;
+  width: 1000px;
+  height: 11px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #e4e5e8, #a6a8ae 55%, #8b8d93);
+  box-shadow: 0 6px 12px rgb(0 0 0 / 14%);
+  transition: opacity 320ms ease;
+}
+
+.rack {
+  position: absolute;
+  top: 240px;
+  left: 0;
+  width: 100%;
+  height: 720px;
+}
+
+/* The garments. Only the slot takes pointer events, so its hit area never turns. */
+
+.item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 720px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: opacity 360ms ease, filter 360ms ease;
+}
+
+.item * {
+  pointer-events: none;
+}
+
+.item__swing {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 460px;
+  height: 700px;
+  margin-left: -230px;
+  transform-origin: 50% 0;
+}
+
+.item__turn,
+.item__sides {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.hanger,
+.face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hanger__hook {
+  fill: none;
+  stroke: #9a9ca3;
+  stroke-linecap: round;
+  stroke-width: 7;
+}
+
+.hanger__arm {
+  fill: none;
+  stroke: #8a5a30;
+  stroke-linecap: round;
+  stroke-width: 13;
+}
+
+.face {
+  backface-visibility: hidden;
+  filter: drop-shadow(0 18px 18px rgb(0 0 0 / 24%));
+}
+
+.face--back {
+  transform: rotateY(180deg);
+}
+
+.g-body {
+  fill: var(--body);
+  transition: fill 450ms ease;
+}
+
+.g-shaded {
+  stroke: rgb(0 0 0 / 22%);
+  stroke-width: 1.5;
+}
+
+.g-hood-inner {
+  fill: rgb(0 0 0 / 38%);
+}
+
+.g-fold {
+  fill: none;
+  stroke: rgb(0 0 0 / 13%);
+  stroke-linecap: round;
+  stroke-width: 7;
+  filter: blur(4px);
+}
+
+.g-seam {
+  fill: none;
+  stroke: rgb(0 0 0 / 24%);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.5;
+}
+
+.g-trim-fill {
+  fill: var(--trim);
+  transition: fill 450ms ease;
+}
+
+.g-trim-line {
+  fill: none;
+  stroke: var(--trim);
+  stroke-linecap: round;
+  stroke-width: 5;
+  transition: stroke 450ms ease;
+}
+
+.g-trim-line--wide {
+  stroke-width: 9;
+}
+
+.g-print {
+  fill: var(--print);
+  font-family: 'Archivo Black', 'Arial Black', sans-serif;
+  text-anchor: middle;
+  transition: fill 450ms ease;
+}
+
+.g-print--script {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 700;
+}
+
+/* The caption and button under the rail. */
+
+.caption {
+  position: absolute;
+  top: 960px;
+  left: 0;
+  width: 0;
+  transition: opacity 280ms ease;
+}
+
+.caption__text {
+  position: absolute;
+  top: 0;
+  left: -230px;
+  width: 460px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 25px;
+  text-align: center;
+}
+
+.pill {
+  position: absolute;
+  top: 1100px;
+  left: 390px;
+  width: 300px;
+  padding: 18px 0;
+  border: 2px solid var(--line);
+  border-radius: 40px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
+  transition: opacity 280ms ease;
+}
+
+/* The detail view. */
+
+.close {
+  position: absolute;
+  top: 560px;
+  left: 50px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  padding: 0;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: rgb(255 255 255 / 70%);
+  color: var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  transition: opacity 300ms ease;
+}
+
+.close svg {
+  width: 36px;
+  height: 36px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.tags {
+  position: absolute;
+  top: 240px;
+  left: 838px;
+  z-index: 3;
+  display: flex;
+  gap: 18px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.tag {
+  position: relative;
+  width: 66px;
+  height: 330px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform-origin: 50% 0;
+  transition: translate 300ms ease;
+}
+
+/* The string from the rail. */
+.tag::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 32px;
+  width: 2px;
+  height: 178px;
+  background: #5d6068;
+}
+
+.tag__label {
+  position: absolute;
+  top: 170px;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 66px;
+  height: 160px;
+  border-radius: 8px 8px 12px 12px;
+  background: var(--tag);
+  box-shadow: 0 8px 16px rgb(0 0 0 / 24%);
+  color: var(--tag-ink);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+}
+
+.tag.is-active {
+  translate: 0 26px;
+}
+
+.tag.is-active::before {
+  height: 178px;
+}
+
+.detail {
+  position: absolute;
+  top: 1040px;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  text-align: center;
+  translate: 0 18px;
+  transition: opacity 240ms ease, translate 340ms ease;
+}
+
+.detail__name {
+  margin: 0 0 30px;
+  font: 400 44px/1.1 'Archivo Black', 'Arial Black', sans-serif;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.switch {
+  position: relative;
+  display: inline-flex;
+  width: 300px;
+  height: 66px;
+  margin-bottom: 30px;
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: 40px;
+}
+
+.switch__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 144px;
+  height: 56px;
+  border-radius: 30px;
+  background: var(--ink);
+  transition: translate 340ms cubic-bezier(0.3, 1.3, 0.5, 1);
+}
+
+.switch[data-face='back'] .switch__thumb {
+  translate: 146px 0;
+}
+
+.switch__option {
+  position: relative;
+  flex: 1;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 240ms ease;
+}
+
+.switch[data-face='front'] .switch__option--front,
+.switch[data-face='back'] .switch__option--back {
+  color: #fff;
+}
+
+.switch[data-face='front'] .switch__option--back,
+.switch[data-face='back'] .switch__option--front {
+  color: var(--ink-soft);
+}
+
+.detail__link {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-decoration: underline;
+  text-transform: uppercase;
+  text-underline-offset: 8px;
+}
+
+.scene.is-detail .brand,
+.scene.is-detail .rail,
+.scene.is-detail .caption,
+.scene.is-detail .pill {
+  opacity: 0;
+}
+
+.scene.is-detail .item {
+  pointer-events: none;
+}
+
+.scene.is-detail .item:not(.is-selected) {
+  opacity: 0.6;
+  filter: blur(12px);
+}
+
+.scene.is-detail .item.is-selected {
+  z-index: 2;
+}
+
+.scene.is-detail .close,
+.scene.is-detail .tags,
+.scene.is-detail .detail {
+  opacity: 1;
+  pointer-events: auto;
+  translate: 0 0;
+}

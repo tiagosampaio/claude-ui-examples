@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clothes Rail</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@500&family=Inter:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="../../shared/base.css">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="stage" id="stage">
+      <h1 class="stage__title stage__title--stacked">Clothes Rail<span class="stage__accent">Pull one out</span></h1>
+
+      <section class="scene" id="scene">
+        <svg class="defs" aria-hidden="true">
+          <defs>
+            <linearGradient id="fabricShade" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#000" stop-opacity="0.34"/>
+              <stop offset="0.28" stop-color="#000" stop-opacity="0.04"/>
+              <stop offset="0.5" stop-color="#fff" stop-opacity="0.09"/>
+              <stop offset="0.74" stop-color="#000" stop-opacity="0.05"/>
+              <stop offset="1" stop-color="#000" stop-opacity="0.38"/>
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <p class="brand" id="brand"></p>
+        <div class="rail"></div>
+        <div class="rack" id="rack"></div>
+
+        <div class="caption" id="caption">
+          <p class="caption__text" id="captionText"></p>
+        </div>
+        <span class="pill" id="availability"></span>
+
+        <button class="close" id="close" type="button" data-item="close" aria-label="Back to the rail">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        </button>
+        <div class="tags" id="tags"></div>
+
+        <div class="detail">
+          <h2 class="detail__name" id="detailName"></h2>
+          <div class="switch" id="faceSwitch" data-face="front">
+            <span class="switch__thumb"></span>
+            <button class="switch__option switch__option--front" id="faceFront" type="button" data-item="front"></button>
+            <button class="switch__option switch__option--back" id="faceBack" type="button" data-item="back"></button>
+          </div>
+          <span class="detail__link" id="detailAvailability"></span>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
