@@ -1,4 +1,6 @@
-# Code Examples
+# Claude UI Examples
+
+Built with Claude. Not affiliated with Anthropic.
 
 Fancy UI examples built to be recorded for Instagram and TikTok. They aren't
 used in any product, so each one only has to look great on camera.
@@ -13,7 +15,7 @@ Then open <http://127.0.0.1:4173/>, which lists every example. There's nothing
 to install. The only requirement is Node.
 
 The examples are also published with GitHub Pages at
-<https://tiagosampaio.github.io/ai-examples/>, which updates on every push to
+<https://tiagosampaio.github.io/claude-ui-examples/>, which updates on every push to
 `main`.
 
 ```bash
