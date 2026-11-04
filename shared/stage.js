@@ -56,9 +56,18 @@ export class Stage {
     };
   }
 
-  /** Recomputes the scale and centers the stage in the window. */
+  /**
+   * Recomputes the scale and centers the stage in the window. A window with no
+   * size (a pane that is still opening, say) keeps the last scale, because a
+   * scale of 0 would make toStage() divide by zero. The window reports a resize
+   * once it has a real size.
+   */
   #fit() {
     const { innerWidth, innerHeight } = window;
+
+    if (innerWidth === 0 || innerHeight === 0) {
+      return;
+    }
 
     this.#scale = Math.min(innerWidth / Stage.WIDTH, innerHeight / Stage.HEIGHT);
     this.#offsetX = (innerWidth - Stage.WIDTH * this.#scale) / 2;
