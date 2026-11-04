@@ -1,0 +1,114 @@
+/*
+ * Shared by every example: the fixed 1080x1920 stage and the demo cursor.
+ * Example styles should use stage pixels directly, since the whole stage is
+ * scaled to fit the window (see stage.js).
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+  transform-origin: 0 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The heading in the black bar above the scene. */
+.stage__title {
+  position: absolute;
+  top: 168px;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  color: #e8772e;
+  font: 500 66px/1 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  text-align: center;
+}
+
+/* A white heading with an orange second line, above a taller scene. */
+.stage__title--stacked {
+  top: 72px;
+  color: #fff;
+  font-size: 84px;
+}
+
+.stage__accent {
+  display: block;
+  margin-top: 10px;
+  color: #f07a1f;
+  font-size: 58px;
+}
+
+/* The fake cursor stands in for the real one, except in ?manual mode. */
+body:not(.is-manual) .stage,
+body:not(.is-manual) .stage * {
+  cursor: none !important;
+}
+
+body.is-manual .demo-cursor {
+  display: none;
+}
+
+.demo-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.demo-cursor__glyph {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  overflow: visible;
+  transform-origin: 30% 10%;
+  transition: transform 90ms ease-out;
+  filter: drop-shadow(0 4px 8px rgb(0 0 0 / 45%));
+}
+
+/* Offsets put each glyph's tip exactly on the cursor position. */
+.demo-cursor__glyph--arrow {
+  left: -10.7px;
+  top: -5.3px;
+}
+
+.demo-cursor__glyph--hand {
+  left: -24px;
+  top: -5.3px;
+  display: none;
+}
+
+.demo-cursor.is-pointer .demo-cursor__glyph--arrow {
+  display: none;
+}
+
+.demo-cursor.is-pointer .demo-cursor__glyph--hand {
+  display: block;
+}
+
+.demo-cursor.is-pressed .demo-cursor__glyph {
+  transform: scale(0.82);
+}

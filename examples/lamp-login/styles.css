@@ -1,0 +1,456 @@
+/*
+ * Everything lit reads --light (0 to 1), which LampLight sets on the scene
+ * every frame. That lets the room, lamp and dust flicker together.
+ */
+
+:root {
+  --warm: #f2a65a;
+  --warm-bright: #ffd18f;
+  --ink: #f6ecdf;
+}
+
+.scene {
+  --light: 0;
+  position: absolute;
+  top: 260px;
+  left: 0;
+  width: 1080px;
+  height: 1400px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle 760px at 215px 420px, #17141f, #09080d 75%);
+}
+
+.scene.no-anim,
+.scene.no-anim * {
+  transition: none !important;
+}
+
+/* Fades the scene edges into the black bars above and below it. */
+.scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  background: linear-gradient(180deg, #000, transparent 7%, transparent 93%, #000);
+  pointer-events: none;
+}
+
+.room,
+.beam,
+.dust,
+.lamp,
+.cord {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.room--lit {
+  background:
+    linear-gradient(180deg, transparent 80%, rgb(190 122 58 / 62%) 80.2%, rgb(58 32 15 / 85%) 100%),
+    radial-gradient(circle 1080px at 215px 430px, #b47a42, #6b4326 42%, #26160d 75%, #120b08);
+  opacity: var(--light);
+}
+
+/* Soft cones. The blur is on the parent because clip-path would cut it off. */
+.beam {
+  filter: blur(16px);
+  opacity: var(--light);
+}
+
+.beam::before,
+.beam::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.beam::before {
+  background: linear-gradient(180deg, rgb(255 216 150 / 62%), rgb(255 180 95 / 8%) 88%);
+  clip-path: polygon(82px 400px, 348px 400px, 1250px 1400px, -820px 1400px);
+}
+
+.beam::after {
+  background: linear-gradient(0deg, rgb(255 216 150 / 26%) 86%, transparent 100%);
+  clip-path: polygon(125px 190px, 305px 190px, 440px 0, -10px 0);
+}
+
+/* Dust only shows up inside the light. */
+.dust {
+  opacity: var(--light);
+  -webkit-mask-image: radial-gradient(circle 1000px at 215px 620px, #000 42%, transparent 100%);
+  mask-image: radial-gradient(circle 1000px at 215px 620px, #000 42%, transparent 100%);
+}
+
+.lamp {
+  z-index: 2;
+}
+
+.lamp__on {
+  opacity: var(--light);
+}
+
+.cord {
+  z-index: 3;
+  overflow: visible;
+}
+
+.cord__line {
+  fill: none;
+  stroke: #caa367;
+  stroke-linecap: round;
+  stroke-width: 4;
+  transition: stroke 300ms ease;
+}
+
+/* The gold that shows up in the dark gets lost against the lit wall. */
+.scene.is-lit .cord__line {
+  stroke: #5e3d1c;
+}
+
+.cord-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  margin: -46px 0 0 -46px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: grab;
+  touch-action: none;
+}
+
+.cord-handle__knob {
+  display: block;
+  width: 20px;
+  height: 46px;
+  border-radius: 10px 10px 7px 7px;
+  background: linear-gradient(90deg, #6d4c20, #e7bd75 45%, #5a3d18);
+  box-shadow: 0 0 calc(22px * var(--light)) rgb(255 200 120 / 70%);
+}
+
+.hint {
+  position: absolute;
+  top: 640px;
+  left: 356px;
+  z-index: 3;
+  width: 146px;
+  margin: 0;
+  color: rgb(246 236 223 / 76%);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.hint__text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: opacity 300ms ease;
+}
+
+.hint__text--on,
+.scene.is-lit .hint__text--off {
+  opacity: 0;
+}
+
+.scene.is-lit .hint__text--on {
+  opacity: 1;
+}
+
+.brand {
+  position: absolute;
+  top: 110px;
+  left: 56px;
+  z-index: 5;
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  opacity: calc(0.28 + 0.6 * var(--light));
+  text-transform: uppercase;
+}
+
+/* Login card. Children stagger in using --i, set when it is rendered. */
+
+.card {
+  position: absolute;
+  top: 50%;
+  left: 520px;
+  z-index: 6;
+  width: 524px;
+  padding: 44px;
+  border: 1.5px solid rgb(255 220 170 / 22%);
+  border-radius: 36px;
+  background:
+    radial-gradient(circle 620px at 0 18%, rgb(242 166 90 / 20%), transparent 75%),
+    rgb(20 13 12 / 72%);
+  box-shadow:
+    0 40px 90px rgb(0 0 0 / 60%),
+    inset 1.5px 1.5px 0 rgb(255 225 180 / 16%);
+  color: var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  translate: 0 calc(-50% + 22px);
+  backdrop-filter: blur(22px);
+  transition: opacity 260ms ease, translate 260ms ease;
+}
+
+.scene.is-lit .card {
+  opacity: 1;
+  pointer-events: auto;
+  translate: 0 -50%;
+  transition: opacity 620ms ease 180ms, translate 760ms cubic-bezier(0.22, 1, 0.36, 1) 180ms;
+}
+
+.card__item {
+  opacity: 0;
+  translate: 0 16px;
+  transition: opacity 160ms ease, translate 160ms ease;
+}
+
+.scene.is-lit .card__item {
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    opacity 480ms ease calc(240ms + var(--i) * 55ms),
+    translate 620ms cubic-bezier(0.22, 1, 0.36, 1) calc(240ms + var(--i) * 55ms);
+}
+
+.card__eyebrow {
+  margin: 0 0 22px;
+  color: var(--warm);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.card__heading {
+  margin: 0 0 34px;
+  font: 400 66px/1.06 'Instrument Serif', Georgia, serif;
+}
+
+.card__heading em {
+  display: block;
+  color: var(--warm-bright);
+}
+
+.field {
+  margin-bottom: 24px;
+}
+
+.field__label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  opacity: 0.66;
+  text-transform: uppercase;
+}
+
+.field__box {
+  display: flex;
+  align-items: center;
+  height: 82px;
+  padding: 0 22px;
+  border: 1.5px solid rgb(255 225 190 / 16%);
+  border-radius: 18px;
+  background: rgb(255 240 220 / 6%);
+  transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+}
+
+.field.is-focused .field__box {
+  border-color: var(--warm);
+  background: rgb(255 220 170 / 10%);
+  box-shadow: 0 0 0 5px rgb(242 166 90 / 18%);
+}
+
+.field__input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--ink);
+  caret-color: var(--warm);
+  font: inherit;
+  font-size: 27px;
+}
+
+.field__input::placeholder {
+  color: rgb(246 236 223 / 36%);
+}
+
+.field__show {
+  flex: none;
+  margin-left: 12px;
+  padding: 6px;
+  border: 0;
+  background: none;
+  color: rgb(246 236 223 / 58%);
+  font: inherit;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  font-size: 22px;
+}
+
+.check {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.check input {
+  position: absolute;
+  opacity: 0;
+}
+
+.check__box {
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid rgb(255 225 190 / 40%);
+  border-radius: 8px;
+  transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.check input:checked + .check__box {
+  border-color: var(--warm);
+  background: var(--warm);
+  box-shadow: inset 0 0 0 5px #1c120d;
+}
+
+.card__link {
+  color: var(--warm-bright);
+}
+
+.submit {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 86px;
+  margin-bottom: 26px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffd596, #ee9f4f);
+  color: #2b170a;
+  box-shadow: 0 12px 34px rgb(240 150 70 / 38%), inset 0 2px 0 rgb(255 255 255 / 45%);
+  font: inherit;
+  font-size: 27px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: box-shadow 200ms ease, filter 200ms ease;
+}
+
+.submit__label,
+.submit__spinner,
+.submit__done {
+  grid-area: 1 / 1;
+  transition: opacity 180ms ease, translate 260ms ease;
+}
+
+.submit__spinner {
+  width: 34px;
+  height: 34px;
+  border: 4px solid rgb(43 23 10 / 25%);
+  border-top-color: #2b170a;
+  border-radius: 50%;
+  opacity: 0;
+  animation: spin 700ms linear infinite;
+}
+
+.submit__done {
+  opacity: 0;
+  translate: 0 14px;
+}
+
+.submit.is-loading .submit__label,
+.submit.is-done .submit__label {
+  opacity: 0;
+}
+
+.submit.is-loading .submit__spinner {
+  opacity: 1;
+}
+
+.submit.is-done .submit__done {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.divider {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 26px;
+  font-size: 20px;
+  letter-spacing: 0.12em;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1.5px;
+  background: rgb(255 225 190 / 28%);
+}
+
+.card__alts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.alt {
+  height: 76px;
+  border: 1.5px solid rgb(255 225 190 / 18%);
+  border-radius: 18px;
+  background: rgb(255 240 220 / 6%);
+  color: var(--ink);
+  font: inherit;
+  font-size: 24px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.card__foot {
+  margin: 0;
+  font-size: 22px;
+  opacity: 0.86;
+  text-align: center;
+}

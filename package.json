@@ -1,0 +1,11 @@
+{
+  "name": "code-examples",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Fancy UI examples built to be recorded for Instagram and TikTok.",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Glassy OTP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="../../shared/base.css">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="stage" id="stage">
+      <h1 class="stage__title stage__title--stacked">Glassy OTP<span class="stage__accent">Auto-verify</span></h1>
+
+      <section class="scene" id="scene">
+        <div class="card" id="card" data-phase="entry">
+          <div class="tile" aria-hidden="true">
+            <svg class="tile__icon tile__icon--phone" viewBox="0 0 24 24">
+              <rect x="7" y="3" width="10" height="18" rx="2.5"/>
+              <path d="M11 18h2"/>
+            </svg>
+            <svg class="tile__icon tile__icon--shield" viewBox="0 0 24 24">
+              <path d="M12 3l7 3v5.5c0 4.4-3 7.8-7 9.5-4-1.7-7-5.1-7-9.5V6z"/>
+              <path d="M9 12l2.2 2.2L15.2 10"/>
+            </svg>
+          </div>
+
+          <div class="copy-stack" id="copy"></div>
+
+          <div class="otp" id="otp">
+            <div class="success" aria-hidden="true">
+              <svg class="success__check" viewBox="0 0 24 24">
+                <path pathLength="1" d="M6 12.5l4 4 8-9"/>
+              </svg>
+            </div>
+          </div>
+
+          <p class="foot foot--prompt" id="prompt"><button class="foot__link" id="resend" type="button" data-item="resend"></button></p>
+          <p class="foot foot--badge">
+            <svg class="foot__lock" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="5" y="11" width="14" height="10" rx="2.5"/>
+              <path d="M8 11V8a4 4 0 0 1 8 0v3"/>
+            </svg>
+            <span id="badgeText"></span>
+          </p>
+        </div>
+
+        <canvas class="confetti" id="confetti" width="1080" height="1400"></canvas>
+      </section>
+    </main>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
