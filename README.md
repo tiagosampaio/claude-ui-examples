@@ -57,3 +57,7 @@ examples/   One self-contained folder per video
 scripts/    Local dev server
 tests/      Logic and demo script checks
 ```
+
+## License
+
+[MIT](LICENSE)
