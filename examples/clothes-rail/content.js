@@ -1,9 +1,12 @@
 /**
  * The shop and what hangs on the rail. Edit this file to re-skin the example for
- * a different video. "kind" picks the drawing from garment-art.js, and the first
- * colour in each list is the one the garment starts in.
+ * a different video. The teams are made up. The first colour in each list is the
+ * one the shirt starts in, and each colour has a front and a back photo.
  */
 export const BRAND = 'OFFCUT';
+
+/** The two sides of a shirt. */
+export const FACE = { FRONT: 'front', BACK: 'back' };
 
 export const LABELS = {
   front: 'Front',
@@ -11,56 +14,45 @@ export const LABELS = {
   availability: 'See availability',
 };
 
+/**
+ * Builds the photo paths for one colour, which follow the same naming pattern.
+ *
+ * @param {string} name The file name without its side, such as "embers".
+ * @returns {{front: string, back: string}} The two paths.
+ */
+function photos(name) {
+  return { front: `shirts/${name}-front.webp`, back: `shirts/${name}-back.webp` };
+}
+
 export const GARMENTS = [
   {
-    kind: 'hoodie',
-    name: 'Harbor Zip Hoodie',
+    name: 'Tidewater Jersey',
+    colors: [{ label: 'Teal', tag: '#1f5a60', ink: '#ffffff', ...photos('tidewater') }],
+  },
+  {
+    name: 'Drifters Jersey',
     colors: [
-      { label: 'Teal', body: '#3f7088', trim: '#2c5365', print: '#dfeaf0' },
-      { label: 'Stone', body: '#b9b3a6', trim: '#8f897c', print: '#38352f' },
+      { label: 'Cobalt', tag: '#1f4fc4', ink: '#ffffff', ...photos('drifters-cobalt') },
+      { label: 'White', tag: '#f3f2ee', ink: '#1f4fc4', ...photos('drifters-white') },
     ],
   },
   {
-    kind: 'tank',
-    name: 'Ridge Mesh Tank',
-    colors: [
-      { label: 'Black', body: '#1d2028', trim: '#d8dade', print: '#eef0f3' },
-      { label: 'Cobalt', body: '#2147a8', trim: '#d9374a', print: '#ffffff' },
-    ],
+    name: 'Embers Jersey',
+    colors: [{ label: 'Orange', tag: '#c8591f', ink: '#ffffff', ...photos('embers') }],
   },
   {
-    kind: 'jacket',
-    name: 'Field Suede Jacket',
-    colors: [
-      { label: 'Tan', body: '#a9713f', trim: '#7e512a', print: '#5f3c1f' },
-      { label: 'Moss', body: '#5f6b45', trim: '#454e31', print: '#343b25' },
-    ],
+    name: 'Lanterns Jersey',
+    colors: [{ label: 'Black', tag: '#17181c', ink: '#d9b45f', ...photos('lanterns') }],
   },
   {
-    kind: 'tee',
-    name: 'Rally Graphic Tee',
-    colors: [
-      { label: 'Red', body: '#d42a2a', trim: '#a81d1d', print: '#ffffff' },
-      { label: 'Ink', body: '#20232b', trim: '#14161b', print: '#f4c430' },
-    ],
+    name: 'Ironwood Jersey',
+    colors: [{ label: 'Forest', tag: '#1c4a2c', ink: '#f0e6c8', ...photos('ironwood') }],
   },
   {
-    kind: 'track',
-    name: 'Tempo Track Jacket',
-    colors: [
-      { label: 'Black', body: '#1b1d22', trim: '#eceef1', print: '#eceef1' },
-      { label: 'Forest', body: '#1f4d3a', trim: '#f0e6c8', print: '#f0e6c8' },
-    ],
-  },
-  {
-    kind: 'tank',
-    name: 'Court Jersey',
-    colors: [
-      { label: 'Cobalt', body: '#2147a8', trim: '#e0394c', print: '#ffffff' },
-      { label: 'White', body: '#eceae4', trim: '#2147a8', print: '#2147a8' },
-    ],
+    name: 'Highline Jersey',
+    colors: [{ label: 'Ivory', tag: '#f1eee4', ink: '#a81f2d', ...photos('highline') }],
   },
 ];
 
-/** The garment facing the camera on the first frame. */
+/** The shirt facing the camera on the first frame. */
 export const DEFAULT_ACTIVE = 3;

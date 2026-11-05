@@ -1,9 +1,9 @@
 import { DEFAULT_ACTIVE } from './content.js';
 
-/** Below the clothes, where each take starts and ends. */
+/** Below the shirts, where each take starts and ends. */
 export const START_POINT = { x: 860, y: 1540 };
 
-/** The garment the take opens. It needs a second colour, and they all have one. */
+/** The shirt the take opens. The demo clicks its second colour tag. */
 const OPENED = 1;
 
 /**

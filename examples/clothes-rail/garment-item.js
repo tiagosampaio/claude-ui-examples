@@ -1,14 +1,29 @@
-import { FACE, garmentArt } from './garment-art.js';
-
 const HANGER = `
   <svg class="hanger" viewBox="0 0 460 700" aria-hidden="true">
     <path class="hanger__hook" d="M230 76C230 50 256 44 256 22C256 4 232 -6 216 4C208 9 204 16 204 24"/>
     <path class="hanger__arm" d="M112 148Q230 56 348 148"/>
   </svg>`;
 
+const SHOWN_CLASS = 'is-shown';
+
 /**
- * One garment on the rail: its slot, hanger and two printed sides. It only draws
- * the numbers it is given, so all the motion can stay in ClosetScene.
+ * Draws one colour's front and back photos. Opacity goes on each photo rather
+ * than on a shared parent, because a parent with opacity would flatten the 3D
+ * flip.
+ *
+ * @param {{front: string, back: string}} color The colour's photos.
+ * @param {number} index The colour's position in the garment's list.
+ * @returns {string} The image markup.
+ */
+function renderPhotos({ front, back }, index) {
+  return `
+    <img class="shirt shirt--front" src="${front}" alt="" draggable="false" data-color="${index}">
+    <img class="shirt shirt--back" src="${back}" alt="" draggable="false" data-color="${index}">`;
+}
+
+/**
+ * One shirt on the rail: its slot, hanger and photos. It only draws the numbers
+ * it is given, so all the motion can stay in ClosetScene.
  */
 export class GarmentItem {
   #element;
@@ -19,9 +34,8 @@ export class GarmentItem {
   /**
    * @param {typeof import('./content.js').GARMENTS[number]} garment What to draw.
    * @param {number} index Its position on the rail.
-   * @param {string} brand The brand's name, for the prints.
    */
-  constructor(garment, index, brand) {
+  constructor(garment, index) {
     this.#element = document.createElement('button');
     this.#element.type = 'button';
     this.#element.className = 'item';
@@ -32,10 +46,7 @@ export class GarmentItem {
       <div class="item__swing">
         <div class="item__turn">
           ${HANGER}
-          <div class="item__sides">
-            ${garmentArt(garment.kind, FACE.FRONT, brand)}
-            ${garmentArt(garment.kind, FACE.BACK, brand)}
-          </div>
+          <div class="item__sides">${garment.colors.map(renderPhotos).join('')}</div>
         </div>
       </div>`;
     this.#swing = this.#element.querySelector('.item__swing');
@@ -43,25 +54,25 @@ export class GarmentItem {
     this.#sides = this.#element.querySelector('.item__sides');
   }
 
-  /** @returns {HTMLButtonElement} The garment's root element. */
+  /** @returns {HTMLButtonElement} The shirt's root element. */
   get element() {
     return this.#element;
   }
 
   /**
-   * Applies a colourway. CSS fades the fills.
+   * Shows one colour's photos. CSS fades between them.
    *
-   * @param {{body: string, trim: string, print: string}} color The colours.
+   * @param {number} index The colour's position in the garment's list.
    * @returns {void}
    */
-  setColor({ body, trim, print }) {
-    this.#element.style.setProperty('--body', body);
-    this.#element.style.setProperty('--trim', trim);
-    this.#element.style.setProperty('--print', print);
+  setColor(index) {
+    this.#sides.querySelectorAll('.shirt').forEach((photo) => {
+      photo.classList.toggle(SHOWN_CLASS, Number(photo.dataset.color) === index);
+    });
   }
 
   /**
-   * Marks whether this is the garment open in the detail view.
+   * Marks whether this is the shirt open in the detail view.
    *
    * @param {boolean} isSelected Whether it is.
    * @returns {void}
@@ -73,14 +84,14 @@ export class GarmentItem {
   /**
    * Draws one frame.
    *
-   * @param {object} pose The garment's pose.
+   * @param {object} pose The shirt's pose.
    * @param {number} pose.x Left edge of its slot, in scene pixels.
    * @param {number} pose.width Width of its slot, in scene pixels.
    * @param {number} pose.lift How far it rises, in scene pixels.
    * @param {number} pose.scale Its size, where 1 is its size on the rail.
    * @param {number} pose.turn Rotation away from the camera, in degrees.
    * @param {number} pose.swing Sideways swing from the hook, in degrees.
-   * @param {number} pose.flip Rotation of the garment off its hanger, in degrees.
+   * @param {number} pose.flip Rotation of the shirt off its hanger, in degrees.
    * @returns {void}
    */
   draw({ x, width, lift, scale, turn, swing, flip }) {

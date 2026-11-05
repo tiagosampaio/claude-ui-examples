@@ -1,14 +1,16 @@
 import assert from 'node:assert/strict';
+import { access } from 'node:fs/promises';
 import { test } from 'node:test';
 
 import { DEFAULT_ACTIVE, GARMENTS } from '../examples/clothes-rail/content.js';
 import { playDemo, START_POINT } from '../examples/clothes-rail/demo.js';
-import { FACE, garmentArt } from '../examples/clothes-rail/garment-art.js';
 import { detailLayout, railLayout, RAIL } from '../examples/clothes-rail/rail-layout.js';
 
 const MAX_TAKE_MS = 15000;
 const COUNT = GARMENTS.length;
 const SCENE_CENTER = 540;
+const OPENED_INDEX = 1;
+const EXAMPLE = new URL('../examples/clothes-rail/', import.meta.url);
 
 /**
  * @param {number[]} slots Slot widths and positions.
@@ -66,14 +68,17 @@ test('detail view centers the chosen garment and keeps the others to its sides',
   }
 });
 
-test('every garment has both sides drawn and at least two colours', () => {
-  for (const { kind, colors } of GARMENTS) {
-    assert.ok(colors.length >= 2, kind);
-    assert.match(garmentArt(kind, FACE.FRONT, 'X'), /^\s*<svg/);
-    assert.match(garmentArt(kind, FACE.BACK, 'X'), /^\s*<svg/);
+test('every colour has both photos on disk, and the opened shirt has a second colour', async () => {
+  for (const { colors } of GARMENTS) {
+    assert.ok(colors.length >= 1);
+
+    for (const { front, back } of colors) {
+      await access(new URL(front, EXAMPLE));
+      await access(new URL(back, EXAMPLE));
+    }
   }
 
-  assert.throws(() => garmentArt('cape', FACE.FRONT, 'X'), /No drawing/);
+  assert.ok(GARMENTS[OPENED_INDEX].colors.length >= 2, 'the demo clicks tag-1 on this shirt');
   assert.ok(DEFAULT_ACTIVE >= 0 && DEFAULT_ACTIVE < COUNT);
 });
 

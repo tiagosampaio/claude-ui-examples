@@ -1,4 +1,4 @@
-import { FACE } from './garment-art.js';
+import { FACE } from './content.js';
 
 const ACTIVE_CLASS = 'is-active';
 
@@ -63,9 +63,9 @@ export class DetailPanel {
   showGarment(garment, colorIndex) {
     this.#name.textContent = garment.name;
     this.#tags.innerHTML = garment.colors
-      .map(({ label, body, print }, index) => `
+      .map(({ label, tag, ink }, index) => `
         <button class="tag" type="button" data-item="tag-${index}" data-color="${index}"
-          style="--tag:${body};--tag-ink:${print}">
+          style="--tag:${tag};--tag-ink:${ink}">
           <span class="tag__label">${label}</span>
         </button>`)
       .join('');

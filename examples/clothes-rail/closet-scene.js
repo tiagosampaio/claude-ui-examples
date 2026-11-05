@@ -1,6 +1,6 @@
 import { stepSpring } from '../../shared/spring.js';
+import { FACE } from './content.js';
 import { DetailPanel } from './detail-panel.js';
-import { FACE } from './garment-art.js';
 import { GarmentItem } from './garment-item.js';
 import { detailLayout, EDGE_ON_DEGREES, mix, railLayout } from './rail-layout.js';
 
@@ -10,7 +10,7 @@ const DETAIL_SPRING = { stiffness: 80, damping: 15 };
 const FLIP_SPRING = { stiffness: 62, damping: 11 };
 const SWING_PER_SPEED = 1.5;
 const MAX_SWING = 7;
-const DETAIL_SCALE = 1.2;
+const DETAIL_SCALE = 1.08;
 const DETAIL_LIFT = 60;
 const FULL_TURN = 180;
 const CAPTION_MARGIN = 230;
@@ -58,7 +58,7 @@ export class ClosetScene {
     this.#scene = scene;
     this.#garments = garments;
     this.#defaultActive = defaultActive;
-    this.#items = garments.map((garment, index) => new GarmentItem(garment, index, brand));
+    this.#items = garments.map((garment, index) => new GarmentItem(garment, index));
     this.#items.forEach((item) => rack.append(item.element));
     this.#panel = new DetailPanel(scene, {
       labels,
@@ -179,14 +179,12 @@ export class ClosetScene {
   }
 
   /**
-   * Gives every garment its current colourway.
+   * Shows every shirt in its current colour.
    *
    * @returns {void}
    */
   #applyColors() {
-    this.#items.forEach((item, index) => {
-      item.setColor(this.#garments[index].colors[this.#colors[index]]);
-    });
+    this.#items.forEach((item, index) => item.setColor(this.#colors[index]));
   }
 
   /**
