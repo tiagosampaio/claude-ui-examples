@@ -37,6 +37,7 @@ npm test
 | `lamp-login` | A pull cord with real physics, a flickering lamp, and a login card that appears in the light | `content.js` | `demo.js` |
 | `glassy-otp` | A cut-corner glass card where a typed code rearranges into a wired grid, then bursts into a green check | `content.js` | `demo.js`, `timeline.js` |
 | `clothes-rail` | Basketball shirts that swing round on a rail, then open with colour tags and a front and back view | `content.js` | `demo.js` |
+| `liquid-footer` | A glass footer that pours in like water, with a wordmark cut through it, rippling links and an evening mode | `content.js` | `demo.js` |
 
 ## Adding an example
 
