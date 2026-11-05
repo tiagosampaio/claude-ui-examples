@@ -3,6 +3,11 @@
   "version": "0.2.0",
   "private": true,
   "description": "Fancy UI examples built to be recorded for Instagram and TikTok.",
+  "homepage": "https://tiagosampaio.github.io/claude-ui-examples/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiagosampaio/claude-ui-examples.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "node scripts/serve.mjs",
